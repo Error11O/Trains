@@ -1,0 +1,12 @@
+name: NetworkTrains
+version: '1.0'
+main: dev.Error110.trains.Trains
+api-version: '1.21'
+commands:
+  trains:
+    description: Main command for trains
+    usage: /trains <create>
+  trainadmin:
+    description: Admin commands for trains
+    usage: /trainadmin <create|scan|scanall|tp|ban|unban|list|remove|review|reload> [args]
+    permission: op
