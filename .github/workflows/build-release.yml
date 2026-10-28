@@ -29,7 +29,7 @@ jobs:
         run: |
           git log -1 --format=%B > "$RUNNER_TEMP/release-notes.txt"
           short_hash=$(git rev-parse --short HEAD)
-          gh release create "$GITHUB_SHA" build/libs/*-all.jar \
+          gh release create "build-$GITHUB_SHA" build/libs/*-all.jar \
             --target "$GITHUB_SHA" \
             --title "$short_hash" \
             --notes-file "$RUNNER_TEMP/release-notes.txt"
