@@ -1,0 +1,35 @@
+name: Build and release
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Build plugin
+        run: ./gradlew build
+      - name: Publish release
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git log -1 --format=%B > "$RUNNER_TEMP/release-notes.txt"
+          short_hash=$(git rev-parse --short HEAD)
+          gh release create "$GITHUB_SHA" build/libs/*-all.jar \
+            --target "$GITHUB_SHA" \
+            --title "$short_hash" \
+            --notes-file "$RUNNER_TEMP/release-notes.txt"
